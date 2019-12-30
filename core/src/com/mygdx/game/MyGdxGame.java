@@ -32,6 +32,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	Rectangle hitbox;
 	Juggernaut juggernaut;
 	ParallaxBackground parallaxBackground;
+	final List<Enemy> enemies = new ArrayList<>();
 
 	// Rendering tools
 	SpriteBatch spriteBatch;
@@ -41,6 +42,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	// Status variables
 	float stateTime;
+	float totalTime;
+	float lastSpawnTime = 0;
 	int verticalPosition;
 	boolean jumping = false;
 
@@ -69,7 +72,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		parallaxBackground.setBackgrounds(getTextures(3, "parallax/desert/bg"));
 		parallaxBackground.setAsyncLayers(getTextures(0, "parallax/desert/async"));
 		parallaxBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		parallaxBackground.setSpeed(0.6f);
+		parallaxBackground.setSpeed(1f);
 		stage.addActor(parallaxBackground);
 	}
 
@@ -85,19 +88,29 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void render() {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear screen
+		totalTime += Gdx.graphics.getDeltaTime();
 		stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
-		
+
+		/*
+		User inputs
+		 */
+		if (Gdx.input.isKeyPressed(Input.Keys.UP) && !jumping) {
+			jumping = true;
+			stateTime = 0f;
+		}
+//		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+		if (totalTime > (lastSpawnTime + 3)) {
+			lastSpawnTime = totalTime;
+			final var newEnemy = new Enemy("enemies/cactus1.png", 1f * 16, DEFAULT_VERTICAL_POSITION);
+			enemies.add(newEnemy);
+			stage.addActor(newEnemy);
+		}
+
 		stage.act();
 		stage.draw();
 
 		// Update camera once per frame
 		camera.update();
-
-		// User inputs
-		if (Gdx.input.isKeyPressed(Input.Keys.UP) && !jumping) {
-			jumping = true;
-			stateTime = 0f;
-		}
 
 		if (jumping) {
 			verticalPosition = DEFAULT_VERTICAL_POSITION + juggernaut.getJumpHeight(stateTime);
@@ -128,6 +141,10 @@ public class MyGdxGame extends ApplicationAdapter {
 				juggernaut.getHeight());
 
 		spriteBatch.end();
+		enemies.stream()
+				.filter(enemy -> !enemy.isVisible())
+				.forEach(enemy -> stage.getActors().removeValue(enemy, true));
+		enemies.removeIf(enemy -> !enemy.isVisible());
 	}
 
 	@Override

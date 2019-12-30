@@ -63,6 +63,12 @@ public class Juggernaut implements Disposable {
 		final List<TextureRegion> jumpTextures = getTextureRegions(jumpSheet, JUMP_SHEET_COLUMNS, JUMP_SHEET_ROWS);
 		jumpAirTexture = new TextureRegion(new Texture(Gdx.files.internal("jump_on_air.png")));
 		jumpTextures.add(jumpAirTexture);
+		// FIXME
+		jumpTextures.add(jumpAirTexture);
+		jumpTextures.add(jumpAirTexture);
+		jumpTextures.add(jumpAirTexture);
+		jumpTextures.add(jumpAirTexture);
+		jumpTextures.add(jumpAirTexture);
 
 		jumpFallTexture = new TextureRegion(new Texture(Gdx.files.internal("jump_fall.png")));
 		jumpTextures.add(jumpFallTexture);
@@ -89,7 +95,7 @@ public class Juggernaut implements Disposable {
 		final float elapsedFrames = statetime / jumpAnimation.getFrameDuration();
 		final float ratio = Math.max(0, (elapsedFrames - 1) / (totalJumpFrames - 2));
 
-		final float initialSpeed = 1200;
+		final float initialSpeed = 1400;
 		return (int) Math.max(0, (((-initialSpeed * ratio) + initialSpeed) * ratio)); // -st² + st -> Movement equations
 	}
 

@@ -17,7 +17,6 @@ public class ParallaxBackground extends Actor {
 	private List<Texture> asyncLayers;
 
 	float heigth;
-	int srcX;
 	int srcY;
 	boolean flipX;
 	boolean flipY;
