@@ -23,7 +23,7 @@ public class Juggernaut implements Disposable {
 	private static final int RUN_SHEET_COLUMNS = 4;
 	private static final int JUMP_SHEET_ROWS = 2;
 	private static final int JUMP_SHEET_COLUMNS = 5;
-	public static final int HITBOX = 290;
+	private static final int HITBOX = 290;
 
 	private Texture runSheet;
 	private Texture jumpSheet;
@@ -31,6 +31,7 @@ public class Juggernaut implements Disposable {
 	private TextureRegion jumpFallTexture;
 	private TextureRegion jumpStopTexture;
 
+	private final float scale;
 	final float totalJumpFrames;
 
 
@@ -45,7 +46,9 @@ public class Juggernaut implements Disposable {
 	public final int jumpFrameHeight;
 	public final int jumpFrameWidth;
 
-	public Juggernaut() {
+	public Juggernaut(final float scale) {
+		this.scale = scale;
+		
 		// Building run animation...
 		runSheet = new Texture(Gdx.files.internal("run.png"));
 		runFrameHeight = runSheet.getHeight() / RUN_SHEET_ROWS;
@@ -91,7 +94,7 @@ public class Juggernaut implements Disposable {
 	}
 
 	public int getHitboxCoordinates(final int x) {
-		return x + ((runFrameWidth - HITBOX + 32) / 2);
+		return (int) (x + (((runFrameWidth - HITBOX + 32) * scale) / 2));
 	}
 
 	Animation<TextureRegion> getAnimation(final boolean jumping) {
@@ -108,5 +111,17 @@ public class Juggernaut implements Disposable {
 		jumpAirTexture.getTexture().dispose();
 		jumpFallTexture.getTexture().dispose();
 		jumpStopTexture.getTexture().dispose();
+	}
+	
+	public float getWidth() {
+		return runFrameWidth * scale;
+	}
+	
+	public float getHeight() {
+		return runFrameHeight * scale;
+	}
+	
+	public int getHitboxSize() {
+		return (int) (HITBOX * scale);
 	}
 }

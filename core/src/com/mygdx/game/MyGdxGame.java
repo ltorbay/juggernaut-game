@@ -17,9 +17,12 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	private static final int SCREEN_WIDTH = 1366;
 	private static final int SCREEN_HEIGHT = 768;
-	public static final int DEFAULT_VERTICAL_POSITION = -SCREEN_HEIGHT / 2 + 100;
+	
+	private static final float JUGGERNAUT_SCALE = 0.5f;
+	
+	public static final int DEFAULT_VERTICAL_POSITION = (int) ((-SCREEN_HEIGHT / 2. + 100) * JUGGERNAUT_SCALE);
 
-	private static final int RUNNER_HORIZONTAL_POSITION = -200;
+	private static final int RUNNER_HORIZONTAL_POSITION = (int) (-200 * JUGGERNAUT_SCALE);
 
 	// Instantiated items
 	Rectangle hitbox;
@@ -48,11 +51,11 @@ public class MyGdxGame extends ApplicationAdapter {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-		juggernaut = new Juggernaut();
+		juggernaut = new Juggernaut(JUGGERNAUT_SCALE);
 		hitbox = new Rectangle(juggernaut.getHitboxCoordinates(RUNNER_HORIZONTAL_POSITION),
 				juggernaut.getHitboxCoordinates(verticalPosition),
-				Juggernaut.HITBOX,
-				Juggernaut.HITBOX);
+				juggernaut.getHitboxSize(),
+				juggernaut.getHitboxSize());
 	}
 
 	@Override
@@ -91,7 +94,11 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		spriteBatch.setProjectionMatrix(camera.combined);
 		spriteBatch.begin();
-		spriteBatch.draw(currentFrame, RUNNER_HORIZONTAL_POSITION, verticalPosition);
+		spriteBatch.draw(currentFrame, 
+				RUNNER_HORIZONTAL_POSITION, 
+				verticalPosition, 
+				juggernaut.getWidth(), 
+				juggernaut.getHeight());
 
 		spriteBatch.end();
 	}
