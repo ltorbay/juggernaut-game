@@ -69,7 +69,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		parallaxBackground.setBackgrounds(getTextures(3, "parallax/desert/bg"));
 		parallaxBackground.setAsyncLayers(getTextures(0, "parallax/desert/async"));
 		parallaxBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		parallaxBackground.setSpeed(1f);
+		parallaxBackground.setSpeed(0.6f);
 		stage.addActor(parallaxBackground);
 	}
 

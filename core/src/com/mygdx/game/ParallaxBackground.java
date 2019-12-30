@@ -9,6 +9,8 @@ import java.util.List;
 
 public class ParallaxBackground extends Actor {
 
+	private static final int LAYER_SPEED_DIFFERENCE = 4;
+
 	private float scroll;
 	private List<Texture> layers;
 	private List<Texture> backgrounds;
@@ -58,7 +60,6 @@ public class ParallaxBackground extends Actor {
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		final int LAYER_SPEED_DIFFERENCE = 2;
 		batch.setColor(getColor().r, getColor().g, getColor().b, getColor().a * parentAlpha);
 
 		scroll += speed;
