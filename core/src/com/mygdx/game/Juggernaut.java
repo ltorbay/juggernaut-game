@@ -89,8 +89,8 @@ public class Juggernaut implements Disposable {
 		final float elapsedFrames = statetime / jumpAnimation.getFrameDuration();
 		final float ratio = Math.max(0, (elapsedFrames - 1) / (totalJumpFrames - 2));
 
-		final float speed = 1600f;
-		return (int) Math.max(0, (((-speed * ratio) + speed) * ratio)); // -st² + st -> Movement equations
+		final float initialSpeed = 1200;
+		return (int) Math.max(0, (((-initialSpeed * ratio) + initialSpeed) * ratio)); // -st² + st -> Movement equations
 	}
 
 	public int getHitboxCoordinates(final int x) {
