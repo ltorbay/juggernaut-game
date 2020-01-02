@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,15 +16,16 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class MyGdxGame extends ApplicationAdapter {
 
 	private static final int SCREEN_WIDTH = 1366;
 	private static final int SCREEN_HEIGHT = 768;
-
 	private static final float JUGGERNAUT_SCALE = 0.5f;
 
+	// TODO get this default from the sprite height (method)
 	public static final int DEFAULT_VERTICAL_POSITION = (int) ((-SCREEN_HEIGHT / 2. + 100) * JUGGERNAUT_SCALE);
 
 	private static final int RUNNER_HORIZONTAL_POSITION = (int) (-200 * JUGGERNAUT_SCALE);
@@ -98,9 +100,9 @@ public class MyGdxGame extends ApplicationAdapter {
 			jumping = true;
 			stateTime = 0f;
 		}
-//		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
 		if (totalTime > (lastSpawnTime + 3)) {
 			lastSpawnTime = totalTime;
+//			final var newEnemy = new Enemy("enemies/cactus2.png", 1f * 16, DEFAULT_VERTICAL_POSITION + 100);
 			final var newEnemy = new Enemy("enemies/cactus1.png", 1f * 16, DEFAULT_VERTICAL_POSITION);
 			enemies.add(newEnemy);
 			stage.addActor(newEnemy);
@@ -127,10 +129,15 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		// Colored hitbox...
 		hitbox.y = juggernaut.getHitboxCoordinates(verticalPosition);
-//		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-//		shapeRenderer.setColor(Color.RED);
+		final Optional<Rectangle> enemyHitboxOptional = enemies.stream().findFirst().map(Enemy::getHitbox);
+		enemyHitboxOptional.ifPresent(enemyHitbox -> {
+
+			shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+			shapeRenderer.setColor(Color.RED);
+			shapeRenderer.rect(enemyHitbox.x, enemyHitbox.y, enemyHitbox.width, enemyHitbox.height);
 //		shapeRenderer.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
-//		shapeRenderer.end();
+			shapeRenderer.end();
+		});
 
 		spriteBatch.setProjectionMatrix(camera.combined);
 		spriteBatch.begin();
